@@ -1,0 +1,53 @@
+{>"layouts/master" /}
+{<title}
+    Story Editor
+{/title}
+
+{<body}
+    <h2>Story Editor</h2>
+    <main role="main">
+        <div class="mb2">
+            <fieldset>
+                <legend>Add a new Story</legend>
+                <form method="POST" action="/story">
+                    <input name="name" placeholder="Story Name"><br>
+                    <input name="creator" placeholder="Creator"><br>
+                    <input type="date" name="date" placeholder="Creation Date"><br>
+                    <input name="desc" placeholder="Description"><br>
+
+                    <input type="hidden" name="_csrf" value="{_csrf}">
+                    <input type="submit" value="Save">
+                </form>
+            </fieldset>
+        </div>
+
+        <div class="products">
+            {?stories}
+                <fieldset>
+                    <legend>Story List</legend>
+                    <ul class="nm-np inline">
+                        {#stories}
+                            <li>
+                                <form method="POST" action="/story">
+                                    <input type="hidden" name="item_id" value="{.id}">
+
+                                    <h3 class="nm-np">{.name}</h3>
+                                    <h4 class="nm-np">{.creator}</h4>
+                                    <h5 class="nm-np">{.date}</h5>
+                                    <h5 class="nm-np">{.desc}</h5>
+
+                                    <input type="submit" value="Delete">
+                                    <!--If we don't at the Cross-Site Request Forgey token, this POST will be rejected-->
+                                    <input type="hidden" name="_csrf" value="{_csrf}">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                </form>
+                            </li>
+                        {/stories}
+                    </ul>
+                </fieldset>
+            {:else}
+                There are no stories :(
+            {/stories}
+        </div>
+    </main>
+{/body}
